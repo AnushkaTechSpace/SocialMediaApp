@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-4xl font-extrabold mb-8 w-full flex justify-center text-gray-800">Posts</h1>
+    
+    <div class="mb-8 flex justify-between">
+        <a href="{% url 'search' %}" class="px-6 py-3 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-400 mx-auto">Search</a>
+        <a href="{% url 'create_post' %}" class="px-6 py-3 text-white bg-gradient-to-r from-green-400 to-green-500 rounded-lg shadow-lg hover:from-green-500 hover:to-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 mx-auto">Create Post</a>
+        <form method="post" action="{% url 'logout' %}" class="inline-block">
+            {% csrf_token %}
+            <button class="px-6 py-3 text-white bg-gradient-to-r from-red-500 to-red-600 rounded-lg shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-red-400" type="submit">Logout</button>
+        </form>
+    </div>
+    
+    {% for post in posts %}
+    <div class="mb-8 p-6 max-w-2xl bg-white shadow-lg rounded-lg border border-gray-200 mx-auto hover:shadow-2xl transition-shadow duration-300 ease-in-out">
+        <div class="flex items-center">
+            <p class="text-xl font-semibold text-gray-800">{{ post.user.username }}</p>
+        </div>
+        <p class="mt-4 text-gray-700">{{ post.content }}</p>
+        {% if post.image %}
+        <div class="mt-6 flex justify-center">
+            <img src="{{ post.image.url }}" alt="Post image" class="w-full h-auto rounded-lg object-cover shadow-sm">
+        </div>
+        {% endif %}
+        <div class="mt-6 flex items-center space-x-4">
+            <form action="{% url 'like_post' post.id %}" method="post" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center space-x-2 text-gray-500 hover:text-gray-700 font-semibold">
+                    {% if user_has_liked.post.id %}
+                        👍 <span>Unlike</span>
+                    {% else %}
+                        👍 <span>Like</span>
+                    {% endif %}
+                </button>
+            </form>
+            <form action="{% url 'comment_post' post.id %}" method="post" class="flex-1">
+                {% csrf_token %}
+                <input type="text" name="content" placeholder="Add a comment..." class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+                <button type="submit" class="text-blue-500 font-bold mt-2">Comment</button>
+            </form>
+        </div>
+        <div class="mt-4 text-gray-600">
+            {% for comment in post.comment_set.all %}
+            <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+            {% endfor %}
+        </div>
+        <div class="mt-6 flex justify-between">
+            <div class="flex space-x-2">
+                <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" class="text-white bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500">Share on Twitter</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="text-white bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500">Share on Facebook</a>
+                <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}" target="_blank" class="text-white bg-green-500 hover:bg-green-700 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500">Share on WhatsApp</a>
+            </div>
+            {% if request.user == post.user %}
+            <div class="flex space-x-2">
+                <a href="{% url 'edit_post' post.id %}" class="text-white bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-yellow-500">Edit</a>
+                <a href="{% url 'delete_post' post.id %}" class="text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-red-500">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

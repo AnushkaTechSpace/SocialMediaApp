@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="bg bg-dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        default
+        {% endblock %}
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-b from-red-500 via-green-500 to-yellow-700 text-white">
+    {% block content %}
+    <div class="bg-gray-800">
+        <nav class="bg-gray-800 p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <a class="text-white text-lg font-bold" href="#">Navbar</a>
+                <button class="text-gray-400 focus:outline-none" type="button">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M4 5h16M4 12h16m-7 7h7" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div class="hidden lg:flex lg:items-center lg:justify-between">
+                    <ul class="lg:flex lg:space-x-4">
+                        <li><a class="text-gray-400 hover:text-white" href="#">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white" href="#">Features</a></li>
+                        <li><a class="text-gray-400 hover:text-white" href="#">Pricing</a></li>
+                        <li class="relative">
+                            <button class="text-gray-400 hover:text-white focus:outline-none" type="button">
+                                Dropdown link
+                                <svg class="inline-block w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M19 9l-7 7-7-7" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <div class="absolute hidden bg-gray-700 text-white mt-2 py-2 rounded shadow-md">
+                                <a class="block px-4 py-2 hover:bg-gray-600" href="#">Action</a>
+                                <a class="block px-4 py-2 hover:bg-gray-600" href="#">Another action</a>
+                                <a class="block px-4 py-2 hover:bg-gray-600" href="#">Something else here</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    {% endblock %}
+</body>
+</html>
